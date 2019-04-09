@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1554371894 source:z:\icat3170 soc-fpga\harkkatyö\geneticalgorithm\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<windows.h>
+
