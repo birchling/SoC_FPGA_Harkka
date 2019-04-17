@@ -84,6 +84,11 @@ typedef struct{
 	void GetFitnesses(int (*populaatio)[genesize], int* fitness){
 
         int i, j;
+
+		for(i = 0; i < popsize; i++){
+			fitness[i] = 0;
+		}
+
         //printf("OG Fitness = %d \n", fitness[2]);
         for (i = 0; i < popsize; i++)
 		{
@@ -96,32 +101,35 @@ typedef struct{
 	}
 
 
-	int onkoListassa(int *rankIndex, int checkedElement, int filledIndexes)
+	int isInList(int *rankIndex, int checkedElement, int filledIndexes)
 	{
-        int listassa = 0;
+        int inList = 0;
         int i;
         for(i = 0; i < filledIndexes; i++)
         {
             if( checkedElement == rankIndex[i])
-                listassa = 1;
+                inList = 1;
         }
-        return listassa;
+        return inList;
 	}
 
-    //TO DO: CrossOver
-    //DONE: Rank determination
+    //CrossOver operation
+	//Switches the chromosomes between the best individuals in decending order
 	void CrossOver(int (*populaatio)[genesize], int *fitnesses)
 	{
 	    int best;
         int rankIndex[popsize];
-        int i,j,k,tmp;
+        int i,j,k, divider;
+		int temp[genesize];
 
+		//Determine what is the index of the best idividuals
+		//E.G. rankIndex[0] is the best, while rankIndex[genesize - 1] is the worst
         for (i = 0; i < popsize; i++)
         {
             best = -1;
             for (j = 0; j < popsize; j++)
             {
-                if(!onkoListassa(rankIndex,j,i))
+                if(!isInList(rankIndex,j,i))
                 {
 
                     if (fitnesses[j] > best)
@@ -133,30 +141,78 @@ typedef struct{
             }
         }
 
-        for(i = 0; i< popsize;i++)
+        /*for(i = 0; i< popsize;i++)
         {
             printf("rankindex = %d \n", rankIndex[i]);
-        }
-
+        }*/
+		//Preform crossover on the first half or second half of the chromosomes
+		for(i = 0; i < popsize; i += 2){
+			int startFromFirstElement = rand() % 2;
+			if(startFromFirstElement){
+				j = 0;
+			}
+			else{
+				j = genesize/2;
+			}
+			for(; (j < (genesize/2) && (startFromFirstElement)) || (j < (genesize) && (!startFromFirstElement)); j++){
+				temp[j] = populaatio[rankIndex[i]][j];
+				populaatio[rankIndex[i]][j] = populaatio[rankIndex[i+1]][j];
+				populaatio[rankIndex[i+1]][j] = temp[j];
+			}
+		}
+	}
+	int getBestFitness(int *fitness){
+		int best;
+		int i;
+		best = -1;
+		for(i = 0; i < popsize; i++){
+			if(best < fitness[i]){
+				best = fitness[i];
+				if(best == genesize){
+					return best;
+				}
+			}
+		}
+		return best;
 	}
 
 
 
 	int main() {
+		int best = -1;
+		int maxGenerations = 100;
+		int fitness[popsize];
+		int i;
 
         srand(time(NULL));
 		//int populaatio[popsize][genesize];
 		int populaatio[popsize][genesize];
 
 		luoPopulaatio(populaatio);
+		int generation = 0;
+		do{
+			GetFitnesses(populaatio, fitness);
+			CrossOver(populaatio,fitness);
+			best = getBestFitness(fitness);
+			if(best == genesize){
+				printf("Best possible answer found\n");
+				break;
+			}
+			/*else if(best > genesize){
+				printf("Something went wrong\n");
+				break;
+			}*/
+			else{
+				printf("Fitness of best individual = %d\n", best);
+				printf("Generation %d completed\n", generation);
+			}
+			generation++;
+		}while(generation < maxGenerations);
 
 		tulostaPopulaatio(populaatio);
 
-		int fitness[popsize];
-        int i;
-        for(i = 0; i < popsize; i++){
-            fitness[i] = 0;
-        }
+        
+        
         //printf("Fitness = %d", fitness[1]);
 		GetFitnesses(populaatio, fitness);
 
@@ -164,6 +220,4 @@ typedef struct{
             printf("Fitness = %d\n", fitness[i]);
 		}
 		//printf("Fitness = %d", fitness[1]);
-        CrossOver(populaatio,fitness);
-
 	}
