@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
+
 
 #define popsize 10
 #define genesize 10
@@ -74,7 +74,6 @@ void luoPopulaatio(int (*populaatio)[genesize])
 	for (i = 0; i < genesize; i++)
 	{
 		//int a*;
-		Sleep(1);
 		temp = createKromosomi();
 		for(j = 0; j < popsize; j++){
 			populaatio[j][i] = temp[j];
@@ -229,10 +228,11 @@ int main() {
 
 	luoPopulaatio(populaatio);
 	int generation = 0;
-	do{
+	while(generation < maxGenerations){
 		mutaatio(populaatio, 10);
 		GetFitnesses(populaatio, fitness);
 		CrossOver(populaatio,fitness);
+		GetFitnesses(populaatio, fitness);
 		best = getBestFitness(fitness);
 		if(best == genesize){
 			printf("In generation %d\n", generation);
@@ -249,14 +249,14 @@ int main() {
 			printf("Generation %d completed\n", generation);
 		}
 		generation++;
-	}while(generation < maxGenerations);
+	}
 
 	tulostaPopulaatio(populaatio);
 
 	
 	
 	//printf("Fitness = %d", fitness[1]);
-	GetFitnesses(populaatio, fitness);
+	//GetFitnesses(populaatio, fitness);
 
 	for(i = 0; i< popsize; i++){
 		printf("Fitness #%d = %d\n", i+1, fitness[i]);
