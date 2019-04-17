@@ -81,6 +81,28 @@ typedef struct{
 		}
 	}
 
+	//Mutaation ohjelman pätkä joka toimii... EHKÄ
+	//Mutaatio rate pitää olla välillä 0-99%
+	void mutaatio(int (*populaatio)[genesize],int mutationrate)
+	{
+	    int i,j;
+	    for (i = 0; i < popsize; i++)
+        {
+            for (j = 0; j < genesize; j++)
+            {
+                if ((rand() % 100) < mutationrate){
+                    if (populaatio[i][j] == 1){
+                        populaatio[i][j] = 0;
+                    }
+                    else{
+                        populaatio[i][j] = 1;
+                    }
+                }
+
+            }
+        }
+	}
+	
 	void GetFitnesses(int (*populaatio)[genesize], int* fitness){
 
         int i, j;
