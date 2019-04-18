@@ -168,7 +168,6 @@ void CrossOver(int (*populaatio)[genesize], int *fitnesses)
 		printf("rankindex = %d \n", rankIndex[i]);
 	}*/
 	//Preform crossover on the first half or second half of the chromosomes
-	//Segfaults when popsize > genesize
 	for(i = 0; i < popsize; i += 2){
 		int startFromFirstElement = rand() % 2;
 		if(startFromFirstElement){
