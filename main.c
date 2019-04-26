@@ -4,8 +4,8 @@
 #include <time.h>
 
 
-#define popsize 10
-#define genesize 10
+#define popsize 50
+#define genesize 32
 #define maxgen 10
 
 typedef struct{
@@ -71,12 +71,12 @@ void luoPopulaatio(int (*populaatio)[genesize])
 	int i;
 	int j;
 	int *temp;
-	for (i = 0; i < genesize; i++)
+	for (i = 0; i < popsize; i++)
 	{
 		//int a*;
 		temp = createKromosomi();
-		for(j = 0; j < popsize; j++){
-			populaatio[j][i] = temp[j];
+		for(j = 0; j < genesize; j++){
+			populaatio[i][j] = temp[j];
 		}
 	}
 }
@@ -183,7 +183,7 @@ void CrossOver(int (*populaatio)[genesize], int *fitnesses)
 		}
 	}
 }
-// Bug 
+
 int getBestFitness(int *fitness){
 	int best = -1;
 	int i;
@@ -217,8 +217,9 @@ int getBestIndex(int *fitness){
 
 
 int main() {
+	printf("Start GA\n");
 	int best = -1;
-	int maxGenerations = 1000;
+	int maxGenerations = 10000;
 	int fitness[popsize];
 	int i;
 
@@ -227,6 +228,7 @@ int main() {
 	int populaatio[popsize][genesize];
 
 	luoPopulaatio(populaatio);
+
 	int generation = 0;
 	while(generation < maxGenerations){
 		mutaatio(populaatio, 10);
