@@ -1,5 +1,5 @@
 
-//#include <sys/mman.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -33,8 +33,10 @@ int main() {
 
 	luoPopulaatio(populaatio);
 
+    SoC_init();
 	int generation = 0;
 	while(generation < maxGenerations){
+        printf("Loop round: %d", generation);
 		mutaatio(populaatio, 10);
 		//GetFitnesses(populaatio, fitness);
 		FPGA_Fitness(populaatio, fitness);
@@ -61,6 +63,7 @@ int main() {
 
 	tulostaPopulaatio(populaatio);
 
+	SoC_stop();
 
 
 	//printf("Fitness = %d", fitness[1]);

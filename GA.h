@@ -15,5 +15,6 @@ extern int isInList(int *rankIndex, int checkedElement, int filledIndexes);
 extern void CrossOver(int (*populaatio)[genesize], int *fitnesses);
 extern int getBestFitness(int *fitness);
 extern int getBestIndex(int *fitness);
+extern void FPGA_Fitness(int (*populaatio)[genesize], int* fitness);
 
 #endif // OURHEAD_H_INCLUDED

@@ -1,4 +1,4 @@
-//#include <sys/mman.h>
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -6,8 +6,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
-#include "SoCLib.h"
 #include "SoCHelper.h"
+
+
 
 
 
@@ -37,37 +38,5 @@ void uint32_t_to_bool_array(uint32_t packed_chromosome, int* chromosome_array){
     }
 
 
-void FPGA_Fitness(int (*populaatio)[genesize], int* fitness)
-    {
-        int temp;
-        int i,j;
-        int status; // 1 = ongoing, 2 = ready
 
-        for(i = 0; i<popsize; i = i + 3)
-        {
-            // Writes to FPGA
-            for(j = 0; j<3; j++)
-            {
-                temp = bool_array_to_32_bit_int(populaatio[i+j]);
-                SoC_write(temp,j);
-            }
-
-            //Write status 1 to FPGA
-            SoC_write(1,3);
-
-            //Check FPGA status
-            do{
-                status = SoC_read(3);
-            }
-            while(status != 2);
-
-            // Reads from FPGA and saves the values to fitness array
-            for(j = 0; j<3; j++)
-            {
-                fitness[i+j] = SoC_read(j);
-            }
-        }
-
-
-    }
 }
